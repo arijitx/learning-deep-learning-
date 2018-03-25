@@ -1,0 +1,4 @@
+# Preprocess Data
+
+python3 preprocess_data.py --embedding /home/arijitx/data/glove/glove.6B.50d.txt --question data/question.txt --sentence data/sentence.txt --output data/embs.npy
+

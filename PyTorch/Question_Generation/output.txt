@@ -1,0 +1,15 @@
+> Creating Models 
+> Loading Data
+Known Words : 54395
+Unknown Words : 10543
+Known Words : 16197
+Unknown Words : 4754
+> Starting Training
+> Epoch : 1 Batch : 20 / 1101  Loss : 8.455140280723572  Val Loss : 7.070295906066894
+> Epoch : 1 Batch : 40 / 1101  Loss : 6.8133148670196535  Val Loss : 6.681672859191894
+> Epoch : 1 Batch : 60 / 1101  Loss : 6.568791770935059  Val Loss : 6.492997360229492
+> Epoch : 1 Batch : 80 / 1101  Loss : 6.540978956222534  Val Loss : 6.423278284072876
+> Epoch : 1 Batch : 100 / 1101  Loss : 6.421312665939331  Val Loss : 6.377030277252198
+> Epoch : 1 Batch : 120 / 1101  Loss : 6.407830810546875  Val Loss : 6.362144470214844
+> Epoch : 1 Batch : 140 / 1101  Loss : 6.423874735832214  Val Loss : 6.315756034851074
+> Epoch : 1 Batch : 160 / 1101  Loss : 6.361147809028625  Val Loss : 6.307111310958862

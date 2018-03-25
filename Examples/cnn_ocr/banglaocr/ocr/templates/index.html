@@ -1,0 +1,148 @@
+<html>
+    <style>
+    #contain{
+      position: relative;
+    }
+    #res{
+      font-size: 20px;
+    }
+
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    var canvas, ctx, flag = false,
+        prevX = 0,
+        currX = 0,
+        prevY = 0,
+        currY = 0,
+        dot_flag = false;
+
+    var x = "white",
+        y = 15;
+
+    function init() {
+        canvas = document.getElementById('can');
+        ctx = canvas.getContext("2d");
+        contain = document.getElementById('contain');
+        w = canvas.width;
+        h = canvas.height;
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        canvas.addEventListener("mousemove", function (e) {
+            findxy('move', e)
+        }, false);
+        canvas.addEventListener("mousedown", function (e) {
+            findxy('down', e)
+        }, false);
+        canvas.addEventListener("mouseup", function (e) {
+            findxy('up', e)
+        }, false);
+        canvas.addEventListener("mouseout", function (e) {
+            findxy('out', e)
+        }, false);
+    }
+
+
+
+    function draw() {
+        ctx.beginPath();
+        ctx.moveTo(prevX, prevY);
+        ctx.lineTo(currX, currY);
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = x;
+        ctx.lineWidth = y;
+        ctx.stroke();
+        ctx.closePath();
+    }
+
+    function erase() {
+
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            document.getElementById("canvasimg").style.display = "none";
+    }
+
+    function save() {
+        document.getElementById("canvasimg").style.border = "2px solid";
+        var dataURL = canvas.toDataURL();
+        document.getElementById("canvasimg").src = dataURL;
+        document.getElementById("canvasimg").style.display = "inline";
+    }
+
+    function predict() {
+        //document.getElementById("canvasimg").style.border = "2px solid";
+        var dataURL = canvas.toDataURL('image/jpeg', 80);
+        $.post("/predict/",
+        {
+            im:dataURL
+        },
+        function(data, status){
+            $('#res').text(data);
+        });
+
+    }
+
+    function findxy(res, e) {
+        if (res == 'down') {
+            prevX = currX;
+            prevY = currY;
+            currX =  e.clientX - canvas.offsetLeft - contain.parentNode.offsetLeft ;
+            currY = e.clientY - canvas.offsetTop - contain.parentNode.offsetTop;
+            flag = true;
+            dot_flag = true;
+            if (dot_flag) {
+                ctx.beginPath();
+                ctx.fillStyle = x;
+                ctx.fillRect(currX, currY, 2, 2);
+                ctx.closePath();
+                dot_flag = false;
+            }
+        }
+        if (res == 'up' || res == "out") {
+            flag = false;
+        }
+        if (res == 'move') {
+            if (flag) {
+                prevX = currX;
+                prevY = currY;
+                currX =  e.clientX - canvas.offsetLeft - contain.parentNode.offsetLeft ;
+                currY = e.clientY - canvas.offsetTop - contain.parentNode.offsetTop;
+
+                draw();
+            }
+        }
+    }
+    </script>
+    <body onload="init()" >
+      <div class="row">
+        <center><h1>Bangla OCR Using Convolutional Neural Network</h1>
+        <p>This is a Bangal Digits OCR application built using Keras and Django. Trained on the Bangla Lekha
+        Dataset </p></center>
+
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+
+        </div>
+        <div class="col-sm-4">
+          <div class="row" id="contain">
+            <center><canvas id="can"  width="200px" height="200px"></canvas></center>
+          </div>
+          <div class="row">
+            <br><br>
+            <center>
+              <div id="res"></div>
+              <br>
+              <input class="btn btn-primary" type="button" value="Predict" id="btn" size="30" onclick="predict()" >
+              <input class="btn btn-primary" type="button" value="Clear" id="clr" size="23" onclick="erase()" >
+            </center>
+          </div>
+        </div>
+        <div class="col-sm-4">
+        </div>
+      </div>
+    </body>
+    </html>
